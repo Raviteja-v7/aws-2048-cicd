@@ -7,14 +7,10 @@ phases:
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin 160885269466.dkr.ecr.us-east-1.amazonaws.com
   build:
     commands:
-      - echo Building the Docker image...
+      - echo Build started on `date`
       - docker build -t 2048-game .
       - docker tag 2048-game:latest 160885269466.dkr.ecr.us-east-1.amazonaws.com/2048-game:latest
   post_build:
     commands:
       - echo Pushing the Docker image...
       - docker push 160885269466.dkr.ecr.us-east-1.amazonaws.com/2048-game:latest
-      - echo Writing image definitions...
-      - printf '[{"name":"2048-container","imageUri":"%s"}]' 160885269466.dkr.ecr.us-east-1.amazonaws.com/2048-game:latest > imagedefinitions.json
-artifacts:
-  files: imagedefinitions.json
